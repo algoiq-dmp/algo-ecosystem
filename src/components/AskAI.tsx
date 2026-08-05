@@ -428,9 +428,9 @@ function answerQuestion(q: string): AIResponse | null {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="mt-4 bg-white rounded-2xl shadow-lg border-l-4 border-l-[#2563EB] border border-slate-200 overflow-hidden"
+            className="mt-4 bg-white rounded-2xl shadow-lg border-l-4 border-l-[#2563EB] border border-slate-200 overflow-hidden max-h-[70vh] flex flex-col"
           >
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
               <div className="flex items-start gap-3 mb-5">
                 <div className="p-2 rounded-lg bg-blue-50 shrink-0">
                   <FiCpu size={18} className="text-[#2563EB]" />
