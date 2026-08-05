@@ -272,8 +272,113 @@ function generateEcosystemOverview(): AIResponse {
   };
 }
 
+function generateRelationshipResponse(nodeA: EcosystemNode, nodeB: EcosystemNode): AIResponse {
+  const getNodeName = (id: string) => nodes.find((n) => n.id === id)?.name || id;
+
+  const connectionsAB = connections.filter(
+    (c) => (c.source === nodeA.id && c.target === nodeB.id) || (c.source === nodeB.id && c.target === nodeA.id)
+  );
+
+  const aSendsToB = connections.filter(c => c.source === nodeA.id && c.target === nodeB.id);
+  const bSendsToA = connections.filter(c => c.source === nodeB.id && c.target === nodeA.id);
+
+  const aConsumes = (nodeA.consumers || []).map(c => c.toLowerCase());
+  const bConsumes = (nodeB.consumers || []).map(c => c.toLowerCase());
+  const aDeps = (nodeA.dependencies || []).map(d => d.toLowerCase());
+  const bDeps = (nodeB.dependencies || []).map(d => d.toLowerCase());
+
+  const aDependsOnB = aDeps.includes(nodeB.id);
+  const bDependsOnA = bDeps.includes(nodeA.id);
+  const aConsumesB = aConsumes.includes(nodeB.id);
+  const bConsumesA = bConsumes.includes(nodeA.id);
+
+  const bulletPoints: string[] = [];
+
+  if (connectionsAB.length > 0) {
+    bulletPoints.push(`Direct Connections: ${connectionsAB.length} connection(s) between ${nodeA.name} and ${nodeB.name}`);
+    for (const c of connectionsAB) {
+      const direction = c.source === nodeA.id ? `${nodeA.name} → ${nodeB.name}` : `${nodeB.name} → ${nodeA.name}`;
+      bulletPoints.push(`  Connection: ${direction} — Type: ${c.type}, Protocol: ${c.protocol}${c.bidirectional ? ' (bidirectional)' : ''}`);
+    }
+  } else {
+    bulletPoints.push(`No direct connections exist between ${nodeA.name} and ${nodeB.name}`);
+  }
+
+  if (aSendsToB.length > 0) {
+    bulletPoints.push(`${nodeA.name} sends data to ${nodeB.name} via: ${aSendsToB.map(c => `${c.type} (${c.protocol})`).join(', ')}`);
+  }
+  if (bSendsToA.length > 0) {
+    bulletPoints.push(`${nodeB.name} sends data to ${nodeA.name} via: ${bSendsToA.map(c => `${c.type} (${c.protocol})`).join(', ')}`);
+  }
+
+  if (aDependsOnB) {
+    bulletPoints.push(`${nodeA.name} depends on ${nodeB.name} — ${nodeB.name} is a dependency of ${nodeA.name}`);
+  }
+  if (bDependsOnA) {
+    bulletPoints.push(`${nodeB.name} depends on ${nodeA.name} — ${nodeA.name} is a dependency of ${nodeB.name}`);
+  }
+
+  if (aConsumesB) {
+    bulletPoints.push(`${nodeA.name} consumes data/services from ${nodeB.name}`);
+  }
+  if (bConsumesA) {
+    bulletPoints.push(`${nodeB.name} consumes data/services from ${nodeA.name}`);
+  }
+
+  const commonConsumers = aConsumes.filter(c => bConsumes.includes(c));
+  if (commonConsumers.length > 0) {
+    const names = commonConsumers.map(id => getNodeName(id));
+    bulletPoints.push(`Both ${nodeA.name} and ${nodeB.name} feed into: ${names.join(', ')}`);
+  }
+
+  const commonDeps = aDeps.filter(d => bDeps.includes(d));
+  if (commonDeps.length > 0) {
+    const names = commonDeps.map(id => getNodeName(id));
+    bulletPoints.push(`Both depend on: ${names.join(', ')}`);
+  }
+
+  bulletPoints.push(`${nodeA.name}: ${nodeA.purpose}`);
+  bulletPoints.push(`${nodeB.name}: ${nodeB.purpose}`);
+
+  const relatedProducts = [...new Set([
+    ...((nodeA.connectedApplications || []).slice(0, 4)),
+    ...((nodeB.connectedApplications || []).slice(0, 4)),
+  ])].filter(n => n !== nodeA.name && n !== nodeB.name).slice(0, 8);
+
+  const followUpQuestions = [
+    `How does ${nodeA.name} send data to ${nodeB.name}?`,
+    `What happens if ${nodeA.name} goes down?`,
+    `What happens if ${nodeB.name} goes down?`,
+    `What data flows between ${nodeA.name} and ${nodeB.name}?`,
+    `How do ${nodeA.name} and ${nodeB.name} interact in the kill switch flow?`,
+  ];
+
+  return {
+    executiveSummary: `${nodeA.name} and ${nodeB.name} relationship: ${connectionsAB.length > 0 ? `They have ${connectionsAB.length} direct connection(s)` : 'No direct connection'}${aDependsOnB ? `. ${nodeA.name} depends on ${nodeB.name}` : ''}${bDependsOnA ? `. ${nodeB.name} depends on ${nodeA.name}` : ''}${aConsumesB ? `. ${nodeA.name} consumes data from ${nodeB.name}` : ''}${bConsumesA ? `. ${nodeB.name} consumes data from ${nodeA.name}` : ''}.`,
+    bulletPoints,
+    relatedProducts,
+    relatedEngines: [nodeA.name, nodeB.name],
+    followUpQuestions,
+  };
+}
+
 function answerQuestion(q: string): AIResponse | null {
   const lower = q.toLowerCase();
+
+  const relationshipKeywords = ['relationship', 'connect', 'link', 'between', 'and', 'with', 'to', 'from', 'how does', 'how do', 'interact', 'communicate', 'talk', 'send', 'receive'];
+  const isRelationshipQuery = relationshipKeywords.some(kw => lower.includes(kw));
+
+  if (isRelationshipQuery) {
+    const matchedNodes: EcosystemNode[] = [];
+    for (const node of nodes) {
+      if (lower.includes(node.name.toLowerCase())) {
+        matchedNodes.push(node);
+      }
+    }
+    if (matchedNodes.length >= 2) {
+      return generateRelationshipResponse(matchedNodes[0], matchedNodes[1]);
+    }
+  }
 
   for (const node of nodes) {
     if (lower.includes(node.name.toLowerCase())) {
