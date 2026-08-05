@@ -365,25 +365,19 @@ function generateRelationshipResponse(nodeA: EcosystemNode, nodeB: EcosystemNode
 function answerQuestion(q: string): AIResponse | null {
   const lower = q.toLowerCase();
 
-  const relationshipKeywords = ['relationship', 'connect', 'link', 'between', 'and', 'with', 'to', 'from', 'how does', 'how do', 'interact', 'communicate', 'talk', 'send', 'receive'];
-  const isRelationshipQuery = relationshipKeywords.some(kw => lower.includes(kw));
-
-  if (isRelationshipQuery) {
-    const matchedNodes: EcosystemNode[] = [];
-    for (const node of nodes) {
-      if (lower.includes(node.name.toLowerCase())) {
-        matchedNodes.push(node);
-      }
-    }
-    if (matchedNodes.length >= 2) {
-      return generateRelationshipResponse(matchedNodes[0], matchedNodes[1]);
+  const matchedNodes: EcosystemNode[] = [];
+  for (const node of nodes) {
+    if (lower.includes(node.name.toLowerCase())) {
+      matchedNodes.push(node);
     }
   }
 
-  for (const node of nodes) {
-    if (lower.includes(node.name.toLowerCase())) {
-      return generateEngineResponse(node);
-    }
+  if (matchedNodes.length >= 2) {
+    return generateRelationshipResponse(matchedNodes[0], matchedNodes[1]);
+  }
+
+  if (matchedNodes.length === 1) {
+    return generateEngineResponse(matchedNodes[0]);
   }
 
   if (lower.includes('topology') || lower.includes('connected') || lower.includes('dependencies')) {
