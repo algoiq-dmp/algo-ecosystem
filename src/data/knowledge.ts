@@ -113,7 +113,7 @@ export const knowledgeBase: KnowledgeBaseEntry[] = [
   },
   {
     id: 'KB-004',
-    entityId: 'ENT-TALKDELTA',
+    entityId: 'ENT-TALKDELTA-AI',
     entityName: 'TalkDelta AI',
     documents: [
       { title: 'TalkDelta AI ML Strategy Engine - Business Requirements Specification', type: 'BRS', status: 'complete', url: 'https://docs.algoiq.internal/kb/talkdelta/brs-ml-engine' },
@@ -588,21 +588,6 @@ export const knowledgeBase: KnowledgeBaseEntry[] = [
     ]
   },
   {
-    id: 'KB-033',
-    entityId: 'ENT-MQ',
-    entityName: 'MQ',
-    documents: [
-      { title: 'MQ - Central Pub/Sub Message Broker', type: 'BRS', status: 'complete', url: 'https://docs.algoiq.internal/kb/mq/brs' },
-      { title: 'MQ - System Requirements', type: 'SRS', status: 'complete', url: 'https://docs.algoiq.internal/kb/mq/srs' },
-      { title: 'MQ - HLD', type: 'HLD', status: 'complete', url: 'https://docs.algoiq.internal/kb/mq/hld' },
-      { title: 'MQ - LLD', type: 'LLD', status: 'complete', url: 'https://docs.algoiq.internal/kb/mq/lld' },
-      { title: 'MQ - API & Topic Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/mq/api' },
-      { title: 'MQ - License', type: 'LICENSE', status: 'complete', url: 'https://docs.algoiq.internal/kb/mq/license' },
-      { title: 'MQ - Deployment Guide', type: 'DEPLOY', status: 'complete', url: 'https://docs.algoiq.internal/kb/mq/deploy' },
-      { title: 'MQ - Monitoring & Operations', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/mq/kb-monitoring' },
-    ]
-  },
-  {
     id: 'KB-034',
     entityId: 'ENT-MANTHAN',
     entityName: 'Manthan',
@@ -645,21 +630,6 @@ export const knowledgeBase: KnowledgeBaseEntry[] = [
       { title: 'TalkDelta - Database Schema', type: 'DB_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/talkdelta/db' },
       { title: 'TalkDelta - User Guide', type: 'USER', status: 'complete', url: 'https://docs.algoiq.internal/kb/talkdelta/user' },
       { title: 'TalkDelta - License', type: 'LICENSE', status: 'complete', url: 'https://docs.algoiq.internal/kb/talkdelta/license' },
-    ]
-  },
-  {
-    id: 'KB-037',
-    entityId: 'ENT-LOCAL-WS',
-    entityName: 'Local WebSocket',
-    documents: [
-      { title: 'Local WebSocket - Real-Time Web Streaming Server', type: 'BRS', status: 'complete', url: 'https://docs.algoiq.internal/kb/local-ws/brs' },
-      { title: 'Local WebSocket - System Requirements', type: 'SRS', status: 'complete', url: 'https://docs.algoiq.internal/kb/local-ws/srs' },
-      { title: 'Local WebSocket - HLD (Lakshmi Sub-Component)', type: 'HLD', status: 'complete', url: 'https://docs.algoiq.internal/kb/local-ws/hld' },
-      { title: 'Local WebSocket - LLD', type: 'LLD', status: 'complete', url: 'https://docs.algoiq.internal/kb/local-ws/lld' },
-      { title: 'Local WebSocket - API & Stream Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/local-ws/api' },
-      { title: 'Local WebSocket - License', type: 'LICENSE', status: 'complete', url: 'https://docs.algoiq.internal/kb/local-ws/license' },
-      { title: 'Local WebSocket - Deployment Guide', type: 'DEPLOY', status: 'complete', url: 'https://docs.algoiq.internal/kb/local-ws/deploy' },
-      { title: 'Local WebSocket - Troubleshooting', type: 'TROUBLESHOOT', status: 'complete', url: 'https://docs.algoiq.internal/kb/local-ws/troubleshoot' },
     ]
   },
   {
