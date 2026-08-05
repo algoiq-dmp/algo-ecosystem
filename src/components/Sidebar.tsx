@@ -26,7 +26,7 @@ const navGroups: NavGroup[] = [
     title: 'ECOSYSTEM EXPLORER',
     items: [
       { icon: FiGrid, label: 'Topology', href: '/' },
-      { icon: FiCpu, label: 'Engines', href: '/engines' },
+      { icon: FiCpu, label: 'Knowledge Explorer', href: '/engines' },
       { icon: FiLayers, label: 'APIs', href: '/apis' },
       { icon: FiTarget, label: 'Strategies', href: '/strategies' },
       { icon: FiServer, label: 'Servers', href: '/servers' },
