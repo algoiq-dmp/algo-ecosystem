@@ -8,6 +8,7 @@ interface LeftSidebarProps {
   onSelectNode: (id: string) => void;
   selectedNode: string | null;
   isOpen: boolean;
+  hiddenNodeIds?: Set<string>;
 }
 
 type TreeView = 'server' | 'type' | 'category';
@@ -36,27 +37,29 @@ const typeColors: Record<string, string> = {
   strategy: '#6366F1',
 };
 
-export default function LeftSidebar({ onSelectNode, selectedNode, isOpen }: LeftSidebarProps) {
+export default function LeftSidebar({ onSelectNode, selectedNode, isOpen, hiddenNodeIds }: LeftSidebarProps) {
   const [view, setView] = useState<TreeView>('server');
 
   if (!isOpen) return null;
+
+  const visibleNodes = nodes.filter(n => !hiddenNodeIds?.has(n.id));
 
   const groupedByServer = serverGroups.map(group => ({
     label: group.name,
     ip: group.ip,
     color: group.color,
-    nodes: nodes.filter(n => group.nodes.includes(n.id)),
+    nodes: visibleNodes.filter(n => group.nodes.includes(n.id)),
   }));
 
   const groupedByType = ['product', 'engine', 'api', 'strategy', 'infrastructure', 'exchange', 'broker'].map(type => ({
     label: type.charAt(0).toUpperCase() + type.slice(1),
     type,
-    nodes: nodes.filter(n => n.type === type),
+    nodes: visibleNodes.filter(n => n.type === type),
   }));
 
   const groupedByCategory = (() => {
     const cats = new Map<string, EcosystemNode[]>();
-    nodes.forEach(n => {
+    visibleNodes.forEach(n => {
       const cat = n.category || 'other';
       if (!cats.has(cat)) cats.set(cat, []);
       cats.get(cat)!.push(n);

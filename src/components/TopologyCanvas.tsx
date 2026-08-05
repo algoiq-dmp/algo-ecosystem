@@ -10,11 +10,12 @@ interface TopologyCanvasProps {
   searchQuery: string;
   theme: 'light' | 'dark';
   activeTypes?: Set<string>;
+  hiddenNodeIds?: Set<string>;
 }
 
 interface Position { x: number; y: number; }
 
-export default function TopologyCanvas({ selectedNode, onSelectNode, searchQuery, theme, activeTypes }: TopologyCanvasProps) {
+export default function TopologyCanvas({ selectedNode, onSelectNode, searchQuery, theme, activeTypes, hiddenNodeIds }: TopologyCanvasProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const zoomGroupRef = useRef<SVGGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -141,9 +142,15 @@ export default function TopologyCanvas({ selectedNode, onSelectNode, searchQuery
   };
 
   const visibleNodes = useMemo(() => {
-    if (!activeTypes || activeTypes.size === 0) return new Set(nodes.map(n => n.id));
-    return new Set(nodes.filter(n => activeTypes.has(n.type)).map(n => n.id));
-  }, [activeTypes]);
+    let result = nodes;
+    if (activeTypes && activeTypes.size > 0) {
+      result = result.filter(n => activeTypes.has(n.type));
+    }
+    if (hiddenNodeIds && hiddenNodeIds.size > 0) {
+      result = result.filter(n => !hiddenNodeIds.has(n.id));
+    }
+    return new Set(result.map(n => n.id));
+  }, [activeTypes, hiddenNodeIds]);
 
   const visibleConnections = useMemo(() => {
     return connections.filter(c => visibleNodes.has(c.source) && visibleNodes.has(c.target));

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import AppShell from '@/components/AppShell';
 import RightPanel from '@/components/RightPanel';
@@ -12,10 +12,14 @@ import PrinciplesPanel from '@/components/PrinciplesPanel';
 import CriticalEnginesBadge from '@/components/CriticalEnginesBadge';
 import EngineReferencePanel from '@/components/EngineReferencePanel';
 import AskAI from '@/components/AskAI';
+import BetaBanner from '@/components/BetaBanner';
+import { useBetaModeStore } from '@/stores/beta-mode-store';
+import { BETA_HIDDEN_NODES } from '@/config/feature-flags';
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
+  const { isBeta, toggleMode } = useBetaModeStore();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -30,6 +34,11 @@ export default function Home() {
   const [rightOpen, setRightOpen] = useState(true);
   const [activeTypes, setActiveTypes] = useState<Set<string>>(new Set(['product', 'engine', 'api', 'infrastructure', 'strategy', 'exchange', 'broker']));
   const { theme } = useTheme();
+
+  const hiddenNodeIds = useMemo(() => {
+    if (!isBeta) return new Set<string>();
+    return new Set(BETA_HIDDEN_NODES);
+  }, [isBeta]);
 
   const handleSelectNode = (id: string | null) => {
     setSelectedNode(id);
@@ -60,7 +69,13 @@ export default function Home() {
       }
     >
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <TopologyFilterBar activeTypes={activeTypes} onToggle={toggleType} />
+        <BetaBanner isBeta={isBeta} />
+        <TopologyFilterBar
+          activeTypes={activeTypes}
+          onToggle={toggleType}
+          isBeta={isBeta}
+          onToggleBeta={toggleMode}
+        />
         <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
           <TopologyCanvas
             selectedNode={selectedNode}
@@ -68,6 +83,7 @@ export default function Home() {
             searchQuery={searchQuery}
             theme={theme}
             activeTypes={activeTypes}
+            hiddenNodeIds={hiddenNodeIds}
           />
           <CriticalEnginesBadge />
           <EngineReferencePanel />

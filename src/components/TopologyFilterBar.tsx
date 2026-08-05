@@ -1,5 +1,5 @@
 'use client';
-import { FiBox, FiCpu, FiLayers, FiServer, FiActivity, FiGlobe, FiLink } from 'react-icons/fi';
+import { FiBox, FiCpu, FiLayers, FiServer, FiActivity, FiGlobe, FiLink, FiAlertTriangle, FiCheck } from 'react-icons/fi';
 
 const typeConfig: Record<string, { label: string; icon: any; color: string }> = {
   product: { label: 'Products', icon: FiBox, color: '#3B82F6' },
@@ -14,9 +14,13 @@ const typeConfig: Record<string, { label: string; icon: any; color: string }> = 
 export default function TopologyFilterBar({
   activeTypes,
   onToggle,
+  isBeta,
+  onToggleBeta,
 }: {
   activeTypes: Set<string>;
   onToggle: (type: string) => void;
+  isBeta: boolean;
+  onToggleBeta: () => void;
 }) {
   return (
     <div className="flex items-center gap-2 px-4 py-2 bg-white/95 dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-800 shrink-0 z-10 backdrop-blur-sm">
@@ -40,9 +44,23 @@ export default function TopologyFilterBar({
           </button>
         );
       })}
-      <span className="text-[10px] text-slate-400 dark:text-slate-500 ml-auto">
-        Click to toggle visibility
-      </span>
+
+      <div className="ml-auto flex items-center gap-2">
+        <span className="text-[10px] text-slate-400 dark:text-slate-500">
+          {isBeta ? 'Beta Mode' : 'Production Mode'}
+        </span>
+        <button
+          onClick={onToggleBeta}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all duration-200 border ${
+            isBeta
+              ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
+              : 'bg-emerald-500 text-white border-emerald-600 shadow-sm'
+          }`}
+        >
+          {isBeta ? <FiAlertTriangle size={12} /> : <FiCheck size={12} />}
+          {isBeta ? 'Beta Version' : 'Production Version'}
+        </button>
+      </div>
     </div>
   );
 }
