@@ -7,6 +7,7 @@ import {
   FiArrowRight, FiClock, FiRefreshCw, FiZap, FiInfo,
   FiExternalLink, FiChevronRight, FiChevronDown, FiSearch, FiSliders,
   FiCheck, FiAlertCircle, FiBarChart2, FiTrendingUp, FiTarget,
+  FiDownload,
 } from 'react-icons/fi';
 import { useBetaModeStore } from '@/stores/beta-mode-store';
 import { BETA_HIDDEN_NODES } from '@/config/feature-flags';
@@ -70,6 +71,133 @@ const healthBarColor = (v: number) =>
       (c) => c.source === engine.id || c.target === engine.id
     );
   }, [engine]);
+
+  const downloadPDF = async () => {
+    if (!engine) return;
+    const { jsPDF } = await import('jspdf');
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    let y = 15;
+    const leftMargin = 15;
+    const pageWidth = 190;
+
+    const checkPageBreak = (needed: number) => {
+      if (y + needed > 280) {
+        doc.addPage();
+        y = 15;
+      }
+    };
+
+    doc.setFontSize(20);
+    doc.setTextColor(0, 0, 0);
+    doc.text(engine.name, leftMargin, y); y += 8;
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`${engine.server}  |  v${engine.version}  |  ${engine.status.toUpperCase()}  |  Health: ${engine.health}%`, leftMargin, y); y += 5;
+    doc.setTextColor(120, 120, 120);
+    doc.setFontSize(8);
+    doc.text(`Category: ${engine.category || 'engine'}`, leftMargin, y); y += 10;
+
+    const addSection = (title: string, items: string[]) => {
+      checkPageBreak(14 + items.length * 6);
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text(title, leftMargin, y); y += 6;
+      doc.setFontSize(9);
+      doc.setTextColor(60, 60, 60);
+      for (const item of items) {
+        if (y > 280) { doc.addPage(); y = 15; }
+        doc.text(`  \u2022 ${item}`, leftMargin + 3, y, { maxWidth: pageWidth - 6 });
+        const lines = doc.splitTextToSize(`  \u2022 ${item}`, pageWidth - 6);
+        y += Math.max(lines.length * 4.5, 5);
+      }
+      y += 3;
+    };
+
+    const addGridSection = (title: string, items: string[]) => {
+      checkPageBreak(14 + items.length * 5);
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text(title, leftMargin, y); y += 6;
+      const colW = pageWidth / 3;
+      doc.setFontSize(8);
+      doc.setTextColor(60, 60, 60);
+      for (let i = 0; i < items.length; i++) {
+        if (y > 280) { doc.addPage(); y = 15; }
+        const col = i % 3;
+        const rowY = y + Math.floor(i / 3) * 5;
+        doc.text(`\u2022 ${items[i]}`, leftMargin + col * colW, rowY, { maxWidth: colW - 3 });
+      }
+      y += Math.ceil(items.length / 3) * 5 + 5;
+    };
+
+    checkPageBreak(10);
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Description', leftMargin, y); y += 6;
+    doc.setFontSize(9);
+    doc.setTextColor(60, 60, 60);
+    const descLines = doc.splitTextToSize(engine.description || '', pageWidth);
+    for (const line of descLines) {
+      if (y > 280) { doc.addPage(); y = 15; }
+      doc.text(line, leftMargin, y);
+      y += 5;
+    }
+    y += 4;
+
+    addSection('Purpose', [engine.purpose]);
+    addSection('Business Value', [engine.businessValue]);
+    addSection('Responsibilities', engine.responsibilities || []);
+    addSection('Inputs', engine.inputs || []);
+    addSection('Outputs', engine.outputs || []);
+    addSection('Data Consumed', engine.dataConsumed || []);
+    addSection('Data Produced', engine.dataProduced || []);
+    addSection('Sends To (Upstream)', engine.sendsTo || []);
+    addSection('Receives From (Downstream)', engine.receivesFrom || []);
+
+    checkPageBreak(10);
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Connected Entities', leftMargin, y); y += 6;
+    doc.setFontSize(9);
+    doc.setTextColor(60, 60, 60);
+    doc.text(`Applications: ${(engine.connectedApplications || []).join(', ')}`, leftMargin + 3, y, { maxWidth: pageWidth - 6 });
+    y += 5;
+    doc.text(`Engines: ${(engine.connectedEngines || []).join(', ')}`, leftMargin + 3, y, { maxWidth: pageWidth - 6 });
+    y += 5;
+    doc.text(`APIs: ${(engine.connectedApis || []).join(', ')}`, leftMargin + 3, y, { maxWidth: pageWidth - 6 });
+    y += 5;
+
+    const protocols = Object.entries(engine.communication || {}).filter(([,v]) => v).map(([k]) => k.toUpperCase());
+    doc.text(`Communication: ${protocols.length > 0 ? protocols.join(', ') : 'None'}`, leftMargin + 3, y, { maxWidth: pageWidth - 6 });
+    y += 5;
+
+    checkPageBreak(10);
+    doc.text(`Databases: ${(engine.databases || []).join(', ') || 'None'}`, leftMargin, y);
+    y += 5;
+    doc.text(`Ports: ${engine.ports || 'N/A'}`, leftMargin, y);
+    y += 6;
+
+    checkPageBreak(14);
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Failure Impact', leftMargin, y); y += 6;
+    doc.setFontSize(9);
+    doc.setTextColor(200, 30, 30);
+    const failLines = doc.splitTextToSize(engine.failureImpact || '', pageWidth);
+    for (const line of failLines) {
+      if (y > 280) { doc.addPage(); y = 15; }
+      doc.text(line, leftMargin, y);
+      y += 5;
+    }
+    y += 4;
+
+    doc.setTextColor(120, 120, 120);
+    doc.setFontSize(8);
+    checkPageBreak(5);
+    doc.text(`Generated by Algo IQ Ecosystem  |  ${engine.name} v${engine.version}`, leftMargin, y);
+
+    doc.save(`${engine.name.replace(/\s+/g, '_')}_DataSheet.pdf`);
+  };
 
   return (
     <div className="h-full overflow-y-auto p-6">
@@ -204,6 +332,14 @@ const healthBarColor = (v: number) =>
               className="absolute top-4 right-4 text-gray-400 hover:text-white text-xl z-10"
             >
               &times;
+            </button>
+
+            <button
+              onClick={downloadPDF}
+              className="absolute top-4 right-12 flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-medium transition-colors z-10"
+            >
+              <FiDownload size={14} />
+              PDF
             </button>
 
             <div className="p-8">
