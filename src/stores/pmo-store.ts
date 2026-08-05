@@ -8,7 +8,7 @@ const seedProductIds = new Set(seedProducts.map((p) => p.id));
 
 const v1ActiveProducts = new Set(['ganesh', 'feed-server', 'mq', 'vega', 'talkoptions', 'talkdelta', 'suchak', 'kavach', 'talkoffice', 'dxcc', 'surya', 'local-websocket']);
 const v2ActiveProducts = new Set([...v1ActiveProducts, 'talkdelta-ai', 'delta-xi', 'vyuh', 'spreadwatch', 'strategy-factory', 'kuber-alpha', 'narad', 'suraksha', 'chitragupta', 'parikshak', 'simulator']);
-const v3ActiveProducts = new Set([...v2ActiveProducts, 'hanuman', 'talkstrategy-api', 'talkstrategy-app', 'aalap-calls', 'rakshak', 'manthan', 'theta-yantra', 'tradepilot', 'odin', 'lakshmi', 'garuda']);
+const v3ActiveProducts = new Set([...v2ActiveProducts, 'hanuman', 'aalap-calls', 'rakshak', 'manthan', 'theta-yantra', 'tradepilot', 'odin', 'lakshmi', 'garuda']);
 
 const versionActiveMap: Record<string, Set<string>> = {
   'week-1': v1ActiveProducts,
