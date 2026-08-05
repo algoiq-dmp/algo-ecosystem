@@ -5,6 +5,8 @@ import * as d3 from 'd3';
 import { nodes, connections, connectionTypeColors, serverGroups } from '@/data/ecosystem';
 import type { EcosystemNode, Connection } from '@/types';
 import { usePMOStore } from '@/stores';
+import { useBetaModeStore } from '@/stores/beta-mode-store';
+import { BETA_HIDDEN_NODES } from '@/config/feature-flags';
 
 interface VersionDefinition {
   id: string;
@@ -33,6 +35,7 @@ export default function PmoTopologyPage() {
   const zoomGroupRef2 = useRef<SVGGElement>(null);
 
   const store = usePMOStore();
+  const { isBeta } = useBetaModeStore();
   const allVersions = store.versions;
   const storeSetVersion = store.setSelectedVersion;
 
@@ -107,16 +110,23 @@ export default function PmoTopologyPage() {
   }, [selectedVersionId, getConnectionsForVersionId]);
 
   const filteredNodeIds = useMemo(() => {
+    let result: Set<string>;
     if (selectedVersionId === 'all') {
-      return new Set(nodes.map(n => n.id));
+      result = new Set(nodes.map(n => n.id));
+    } else {
+      const active = activeProductIds;
+      result = new Set(nodes.map(n => n.id));
+      for (const id of result) {
+        if (!active.has(id)) result.delete(id);
+      }
     }
-    const active = activeProductIds;
-    const all = new Set(nodes.map(n => n.id));
-    for (const id of all) {
-      if (!active.has(id)) all.delete(id);
+    if (isBeta) {
+      for (const id of result) {
+        if ((BETA_HIDDEN_NODES as readonly string[]).includes(id)) result.delete(id);
+      }
     }
-    return all;
-  }, [selectedVersionId, activeProductIds]);
+    return result;
+  }, [selectedVersionId, activeProductIds, isBeta]);
 
   const filteredConnections = useMemo(() => {
     if (selectedVersionId === 'all') return connections;
@@ -243,7 +253,7 @@ export default function PmoTopologyPage() {
           );
         })}
 
-        {nodes.map(node => {
+        {nodes.filter(n => filteredNodeIds.has(n.id)).map(node => {
           const pos = nodePositionsMap.get(node.id);
           if (!pos) return null;
           const status = getNodeStatusForVersion(node.id, versionContext);

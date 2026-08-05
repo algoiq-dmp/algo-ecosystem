@@ -8,8 +8,22 @@ import {
   FiExternalLink, FiChevronRight, FiChevronDown, FiSearch, FiSliders,
   FiCheck, FiAlertCircle, FiBarChart2, FiTrendingUp, FiTarget,
 } from 'react-icons/fi';
+import { useBetaModeStore } from '@/stores/beta-mode-store';
+import { BETA_HIDDEN_NODES } from '@/config/feature-flags';
 
-const engineNodes = nodes.filter((n) => n.type === 'engine');
+export default function EnginesPage() {
+  const [search, setSearch] = useState('');
+  const [serverFilter, setServerFilter] = useState('');
+  const [selectedEngine, setSelectedEngine] = useState<string | null>(null);
+  const { isBeta } = useBetaModeStore();
+
+  const engineNodes = useMemo(() => {
+    let result = nodes.filter((n) => n.type === 'engine');
+    if (isBeta) {
+      result = result.filter(n => !(BETA_HIDDEN_NODES as readonly string[]).includes(n.id));
+    }
+    return result;
+  }, [isBeta]);
 
 const statusColors: Record<string, string> = {
   online: 'bg-green-500',
@@ -27,11 +41,6 @@ const categoryColors: Record<string, string> = {
 
 const healthBarColor = (v: number) =>
   v >= 99.9 ? 'bg-green-500' : v >= 99.5 ? 'bg-yellow-500' : 'bg-red-500';
-
-export default function EnginesPage() {
-  const [search, setSearch] = useState('');
-  const [serverFilter, setServerFilter] = useState('');
-  const [selectedEngine, setSelectedEngine] = useState<string | null>(null);
 
   const servers = useMemo(
     () => [...new Set(engineNodes.map((n) => n.server))],

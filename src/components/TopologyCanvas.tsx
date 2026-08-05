@@ -244,10 +244,9 @@ export default function TopologyCanvas({ selectedNode, onSelectNode, searchQuery
             );
           })}
 
-          {nodes.map(node => {
+          {nodes.filter(n => visibleNodes.has(n.id)).map(node => {
             const pos = nodePositions.get(node.id);
             if (!pos) return null;
-            const typeVisible = !activeTypes || activeTypes.size === 0 || activeTypes.has(node.type);
             const color = getNodeColor(node);
             const isHighlighted = highlightedNodes.has(node.id);
             const isSelected = selectedNode === node.id;
@@ -260,16 +259,6 @@ export default function TopologyCanvas({ selectedNode, onSelectNode, searchQuery
             const borderWidth = isCritical ? (isSelected ? 3 : 2.5) : (isSelected ? 3 : 1.5);
             const nodeWidth = Math.max(node.name.length * 8 + 24, 100);
             const nodeHeight = 56;
-
-            if (!typeVisible) {
-              return (
-                <g key={node.id}
-                  transform={`translate(${pos.x - nodeWidth / 2}, ${pos.y - nodeHeight / 2})`}
-                  opacity={0}
-                  pointerEvents="none">
-                </g>
-              );
-            }
 
             return (
               <g key={node.id}
