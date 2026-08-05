@@ -2,7 +2,9 @@
 
 ## What is Lakshmi?
 
-Lakshmi is the enterprise real-time data distribution platform that acts as the central nervous system of the Algo-IQ ecosystem. It ingests market data from all upstream sources, normalizes it into a unified message format, and distributes it to every downstream consumer—strategy engines, analytics dashboards, trading terminals, and external web projects—over a high-performance publish/subscribe fabric.
+Lakshmi is the **Single Source of Truth (SSOT) Broadcast Distribution Platform** for the entire Algo IQ Ecosystem. Every market data packet entering the ecosystem passes through Lakshmi before reaching any engine. No engine directly connects to NSE/BSE/MCX.
+
+Lakshmi is the central nervous system — the market data distribution layer that ensures every engine receives synchronized, validated, and resilient real-time market data while remaining insulated from changes in exchange connectivity or feed providers.
 
 ## Why Lakshmi Was Developed
 
@@ -35,16 +37,33 @@ Provide reliable, low-latency, unified market data distribution to all Algo-IQ a
 | WebSocket streaming to clients | Strategy computation |
 | Centralized monitoring & alerting | User authentication (delegated to Suraksha) |
 | Integration with Ganesh, Surya, Narad | Market data generation or cleansing |
+| Feed validation, normalization, symbol mapping | Exchange protocol implementation |
+| Automatic failover between primary/alternate sources | Broker API integration |
+| Replay and recovery of missing packets | Backtesting logic |
 
 ## Target Users
 
 | User Type | Interaction |
 |---|---|
-| **AI/ML Engines** (Vega, Brahma, etc.) | Subscribe to MQ topics for real-time ticks |
-| **Web Applications** (Algo-IQ Dashboard) | Connect via WebSocket for streaming data |
-| **Strategy Builder** | Receive live prices during strategy construction |
-| **Trading Terminals** | Consume directed broadcast feeds |
-| **DevOps/SRE** | Monitor health, latency, and throughput via dashboard |
+| **Vega Engine** | Subscribe to MQ for real-time ticks for order execution |
+| **Suchak Engine** | Receive market data for indicator computation |
+| **Ganesh Engine** | Consume OHLC data for candle generation |
+| **Delta XI** | Subscribe for exchange integration data |
+| **VYUH Engine** | Receive market data for analytics |
+| **SpreadWatch** | Consume spread and arbitrage data |
+| **Manthan Engine** | Receive market data for processing |
+| **Trinetra Engine** | Subscribe for monitoring data |
+| **Strategy Factory** | Receive live prices during strategy construction |
+| **Parikshak** | Consume data for strategy validation |
+| **Kuber Alpha** | Receive data for strategy management |
+| **TalkDelta** | Consume market data for analytics |
+| **TalkOptions** | Receive options data for analysis |
+| **TalkOffice** | Subscribe for trading terminal data |
+| **DXCC** | Consume data for operations dashboard |
+| **Chitragupta** | Receive data for audit trail |
+| **Web Applications** | Connect via WebSocket for streaming data |
+| **Mobile Apps** | Connect via REST for snapshot data |
+| **AI Agents** | Subscribe to MQ for real-time ticks |
 
 ## Benefits
 
@@ -53,21 +72,47 @@ Provide reliable, low-latency, unified market data distribution to all Algo-IQ a
 - **Sub-millisecond routing** via in-memory topic trie.
 - **Real-time monitoring** with Prometheus + Grafana dashboards.
 - **Horizontally scalable** to support growing tick volumes.
+- **Protocol abstraction** — downstream engines independent of exchange packet formats.
+- **Automatic failover** between primary and alternate data sources.
 
 ## Inputs
 
 | Source | Description | Protocol | Avg Throughput |
 |---|---|---|---|
-| **Exchange** (NSE, BSE) | Raw market ticks via lease line | TCP / Proprietary | 250K msg/s |
+| **Exchange** (NSE, BSE, MCX) | Raw market ticks via lease line | TCP / Proprietary | 250K msg/s |
+| **Feed Server** | Exchange lease line ingestion (sub-component) | MQ | 250K msg/s |
 | **Ganesh** | Pre-processed normalized ticks | AMQP (RabbitMQ) | 200K msg/s |
-| **Surya** | Market snapshots and depth data | AMQP (RabbitMQ) | 100K msg/s |
+| **Surya** | BOD initialization, expiry calendar, symbol master, token mapping | REST | 100K msg/s |
 
 ## Outputs
 
 | Consumer | Delivery Method | Topic Pattern |
 |---|---|---|
-| All AI Engines (Vega, Brahma, Garuda) | RabbitMQ | `market.live.*` |
-| Algo-IQ Dashboard | WebSocket (ws://) | `stream.*` |
-| Strategy Builder | WebSocket | `market.ohlc.*` |
-| Broker Connectivity (Narad) | RabbitMQ | `trade.confirm.*` |
-| Web Projects | WebSocket + REST | `market.*` |
+| Vega Engine | RabbitMQ | `market.live.*` |
+| Suchak Engine | RabbitMQ | `market.live.*` |
+| Ganesh Engine | RabbitMQ | `market.live.*` |
+| Delta XI | RabbitMQ | `market.live.*` |
+| VYUH Engine | RabbitMQ | `market.live.*` |
+| SpreadWatch | RabbitMQ | `market.live.*` |
+| Manthan Engine | RabbitMQ | `market.live.*` |
+| Trinetra Engine | RabbitMQ | `market.live.*` |
+| Strategy Factory | RabbitMQ | `market.live.*` |
+| Parikshak | RabbitMQ | `market.live.*` |
+| Kuber Alpha | RabbitMQ | `market.live.*` |
+| TalkDelta | RabbitMQ | `market.live.*` |
+| TalkOptions | RabbitMQ | `market.live.*` |
+| TalkOffice | RabbitMQ | `market.live.*` |
+| DXCC | RabbitMQ | `market.live.*` |
+| Chitragupta | RabbitMQ | `market.live.*` |
+| Web Projects | WebSocket | `stream.*` |
+| Mobile Apps | REST | `market/snapshot` |
+| AI Agents | RabbitMQ | `market.live.*` |
+
+## Design Principles
+
+1. **Single Source of Truth (SSOT)** for all market broadcasts.
+2. **No engine connects directly to the exchange** except through the approved feed layer.
+3. **Protocol abstraction**, so downstream engines are independent of exchange packet formats.
+4. **Automatic failover** between primary and alternate data sources without impacting subscribers.
+5. **Scalable publish/subscribe architecture** supporting MQ, WebSocket, REST, and future Kafka/gRPC integrations.
+6. **Observability-first**, with health monitoring, latency metrics, packet validation, replay, and audit logging.
