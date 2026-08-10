@@ -47,8 +47,8 @@ export interface Connection {
   id: string;
   source: string;
   target: string;
-  type: 'market-data' | 'order' | 'trade-confirmation' | 'ohlc' | 'signal' | 'risk' | 'ai' | 'audit' | 'monitoring' | 'api-call' | 'mq-broadcast';
-  protocol: 'REST' | 'WebSocket' | 'MQ' | 'TCP' | 'UDP' | 'FIX';
+  type: 'market-data' | 'order' | 'trade-confirmation' | 'ohlc' | 'signal' | 'calculation-response' | 'strategy-instruction' | 'delta-risk' | 'delta-risk-alert' | 'risk' | 'ai' | 'audit' | 'monitoring' | 'api-call' | 'mq-broadcast';
+  protocol: 'REST' | 'REST + WS' | 'WebSocket' | 'MQ' | 'TCP' | 'UDP' | 'FIX';
   bidirectional: boolean;
 }
 
