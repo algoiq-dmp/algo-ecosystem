@@ -641,6 +641,26 @@ export const seedProducts: ProductEntry[] = [
     lastUpdated: '2026-07-19',
     releaseTarget: '2026-08-11',
   },
+  {
+    id: 'trader-api-basic',
+    name: 'Trader Basic API Plan',
+    category: 'API Product',
+    description: 'External API access for retail traders and independent algo developers. ₹499/month with 500 free API calls. Additional calls at ₹0.75 each. Includes Ganesh Engine API (historical OHLC), Surya Engine API (BOD/EOD files), and Garuda Margin API (pre-trade margin). API Key authentication. Email support (24hr response).',
+    version: '1.0.0',
+    status: 'production',
+    owner: 'API Products',
+    server: 'api.algoiq.internal',
+    progress: 100,
+    documentationProgress: 90,
+    testingProgress: 92,
+    securityProgress: 88,
+    devopsProgress: 85,
+    readiness: 'green',
+    dependencies: ['ganesh', 'surya', 'garuda'],
+    features: ['Ganesh OHLC API Access', 'Surya BOD/EOD File API', 'Garuda Pre-Trade Margin API', '500 Free API Calls/Month', '₹0.75/Additional Call', 'API Key Authentication', 'Email Support (24hr)', 'Usage Dashboard', 'Rate Limiting', 'Billing Portal'],
+    lastUpdated: '2026-08-11',
+    releaseTarget: '2026-08-15',
+  },
 ];
 
 export const seedDocs: DocumentationItem[] = (() => {

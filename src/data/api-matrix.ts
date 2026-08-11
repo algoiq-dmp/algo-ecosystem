@@ -267,3 +267,39 @@ export const apiGovernanceFields = [
   'Versioning policy', 'Changelog', 'Testing checklist',
   'Security considerations', 'Production readiness checklist',
 ] as const;
+
+export interface ApiPricingPlan {
+  id: string;
+  name: string;
+  monthlyPrice: number;
+  currency: string;
+  includedApiCalls: number;
+  additionalCallPrice: number;
+  includedApis: string[];
+  features: string[];
+  targetAudience: string;
+  status: 'active' | 'planned';
+}
+
+export const apiPricingPlans: ApiPricingPlan[] = [
+  {
+    id: 'trader-basic',
+    name: 'Trader Basic',
+    monthlyPrice: 499,
+    currency: 'INR',
+    includedApiCalls: 500,
+    additionalCallPrice: 0.75,
+    includedApis: ['Ganesh Engine API', 'Surya Engine API', 'Garuda Margin API'],
+    features: [
+      'Historical OHLC data from Ganesh',
+      'BOD/EOD exchange files from Surya',
+      'Pre-trade margin calculation via Garuda',
+      'API Key authentication',
+      '500 free API calls per month',
+      '₹0.75 per additional API call',
+      'Email support (24hr response)',
+    ],
+    targetAudience: 'External Traders, Retail Algo Developers, Independent Strategists',
+    status: 'active',
+  },
+];

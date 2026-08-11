@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { apiMatrix, apiFlows, apiPriorities, apiStatuses, apiGovernanceFields } from '@/data/api-matrix';
+import { apiMatrix, apiFlows, apiPriorities, apiStatuses, apiGovernanceFields, apiPricingPlans } from '@/data/api-matrix';
 import type { ApiMatrixEntry } from '@/data/api-matrix';
 import {
   FiSearch, FiFilter, FiExternalLink, FiChevronDown, FiChevronRight,
@@ -247,6 +247,68 @@ export default function ApiRegistryPage() {
               })}
             </tbody>
           </table>
+        </div>
+
+        {/* API Pricing Plans */}
+        <div className="p-6 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-3">External API Plans</h2>
+          <div className="grid grid-cols-1 gap-4">
+            {apiPricingPlans.map(plan => (
+              <div key={plan.id} className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-gradient-to-br from-indigo-50/50 to-white dark:from-indigo-950/30 dark:to-slate-900 overflow-hidden">
+                <div className="flex items-start justify-between p-5">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-sm font-bold text-slate-800 dark:text-white">{plan.name}</h3>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                        {plan.status === 'active' ? 'LIVE' : 'PLANNED'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-3">{plan.targetAudience}</p>
+                    <div className="flex items-baseline gap-1 mb-4">
+                      <span className="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">₹{plan.monthlyPrice}</span>
+                      <span className="text-xs text-slate-400">/month</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-2 mb-4">
+                      <div className="flex items-center gap-2 text-xs">
+                        <span className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-base font-bold text-emerald-600 dark:text-emerald-400 shrink-0">500</span>
+                        <div>
+                          <div className="font-semibold text-slate-700 dark:text-slate-300">Free API Calls</div>
+                          <div className="text-[10px] text-slate-400">included per month</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs">
+                        <span className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-base font-bold text-amber-600 dark:text-amber-400 shrink-0">₹0.75</span>
+                        <div>
+                          <div className="font-semibold text-slate-700 dark:text-slate-300">Per Additional Call</div>
+                          <div className="text-[10px] text-slate-400">beyond 500</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-semibold text-slate-400 uppercase mb-1.5">Included APIs</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {plan.includedApis.map(api => (
+                          <span key={api} className="px-2 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 text-[10px] font-medium border border-indigo-200 dark:border-indigo-800">
+                            {api}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-slate-50 dark:bg-slate-800/50 border-t border-indigo-100 dark:border-indigo-900/50 px-5 py-3">
+                  <ul className="grid grid-cols-2 gap-x-4 gap-y-1">
+                    {plan.features.map((f, i) => (
+                      <li key={i} className="flex items-center gap-1.5 text-[10px] text-slate-600 dark:text-slate-400">
+                        <FiCheckCircle size={10} className="text-emerald-500 shrink-0" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Governance Template */}

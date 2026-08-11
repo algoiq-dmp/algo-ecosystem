@@ -759,4 +759,19 @@ export const knowledgeBase: KnowledgeBaseEntry[] = [
       { title: 'API Production Readiness Checklist', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/production-readiness' },
     ]
   },
+  {
+    id: 'KB-051',
+    entityId: 'ENT-EXCHANGE',
+    entityName: 'NSE-BSE Exchange Reference',
+    documents: [
+      { title: 'NSE-BSE 2026 Exchange Reference - Complete Guide', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/exchange/nse-bse-2026-reference' },
+      { title: 'NSE FO Contract File Field Reference', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/exchange/contract-file-fields' },
+      { title: 'Token Management & Contract Lifecycle Guide', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/exchange/token-lifecycle' },
+      { title: 'BOD Health Checklist (Daily Contract Refresh)', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/exchange/bod-checklist' },
+      { title: 'NSE-BSE Expiry Calendar 2026', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/exchange/expiry-calendar-2026' },
+      { title: 'Tick Validation Rules & Stale Data Detection', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/exchange/tick-validation' },
+      { title: 'Closing Auction Session (CAS) Integration Guide', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/exchange/cas-guide' },
+      { title: 'Developer Top 10 Mistakes & Best Practices', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/exchange/dev-best-practices' },
+    ]
+  },
 ];
