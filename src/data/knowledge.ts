@@ -774,4 +774,19 @@ export const knowledgeBase: KnowledgeBaseEntry[] = [
       { title: 'Developer Top 10 Mistakes & Best Practices', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/exchange/dev-best-practices' },
     ]
   },
+  {
+    id: 'KB-052',
+    entityId: 'ENT-DOMAIN-KB',
+    entityName: 'Domain Knowledge Base',
+    documents: [
+      { title: 'Indian Stock Market Basics', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/domain/indian-stock-market' },
+      { title: 'Futures & Options Basics', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/domain/futures-options' },
+      { title: 'Market Data & Feed Knowledge', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/domain/market-data-feeds' },
+      { title: 'Algo Trading Fundamentals', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/domain/algo-trading' },
+      { title: 'OMS & RMS Knowledge', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/domain/oms-rms' },
+      { title: 'Algo IQ Engine Ecosystem Overview', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/domain/engine-ecosystem' },
+      { title: 'Strategy & Analytics Knowledge', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/domain/strategy-analytics' },
+      { title: 'Infrastructure & Operational Knowledge', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/domain/infrastructure-ops' },
+    ]
+  },
 ];
