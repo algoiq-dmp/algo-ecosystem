@@ -28,6 +28,7 @@ const navGroups: NavGroup[] = [
       { icon: FiGrid, label: 'Topology', href: '/' },
       { icon: FiCpu, label: 'Knowledge Explorer', href: '/engines' },
       { icon: FiLayers, label: 'APIs', href: '/apis' },
+      { icon: FiActivity, label: 'API Registry', href: '/api-registry' },
       { icon: FiTarget, label: 'Strategies', href: '/strategies' },
       { icon: FiServer, label: 'Servers', href: '/servers' },
       { icon: FiActivity, label: 'Data Flow', href: '/data-flow' },

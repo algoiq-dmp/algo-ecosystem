@@ -64,7 +64,7 @@ export default function RightPanel({ selectedNode, onClose, isOpen }: RightPanel
   const getNodeName = (id: string) => nodes.find(n => n.id === id)?.name || id;
 
   return (
-    <aside className="w-[400px] bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col shrink-0 overflow-hidden shadow-xl z-20">
+    <aside className="w-[400px] h-full bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col shrink-0 overflow-hidden shadow-xl z-20">
       {/* Header with Tabs */}
       <div className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
         <div className="flex items-center justify-between px-4 py-2.5">

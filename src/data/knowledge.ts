@@ -732,4 +732,31 @@ export const knowledgeBase: KnowledgeBaseEntry[] = [
       { title: 'Exchange File Processing - SPAN & Exposure Guide', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/garuda-intel/exchange-files' },
     ]
   },
+  {
+    id: 'KB-050',
+    entityId: 'ENT-API-REGISTRY',
+    entityName: 'API Registry',
+    documents: [
+      { title: 'API Governance & Dependency Matrix', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/governance-matrix' },
+      { title: 'API Standard Document Structure (21 Sections)', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/standard-structure' },
+      { title: 'Surya Engine API v3.5.0 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/surya-engine-api' },
+      { title: 'Ganesh Engine API v2.6.1 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/ganesh-engine-api' },
+      { title: 'TalkOptions API v4.7.2 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/talkoptions-api' },
+      { title: 'Suchak-KuberAlpha API v5.0.0 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/suchak-kuberalpha-api' },
+      { title: 'Garuda Margin API v5.0.0 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/garuda-margin-api' },
+      { title: 'Garuda Margin Intelligence API v5.0.0 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/garuda-margin-intelligence-api' },
+      { title: 'TalkDelta API v6.0.0-beta - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/talkdelta-api' },
+      { title: 'Vega TalkStrategy API v6.3.0 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/vega-talkstrategy-api' },
+      { title: 'Vega Order Processor API v6.3.0 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/vega-orderprocessor-api' },
+      { title: 'MQ API v1.8.4 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/mq-api' },
+      { title: 'WebSocket API v2.3.2 - Reference', type: 'API_DOC', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/websocket-api' },
+      { title: 'Lakshmi Engine API v3.0.0 - In Progress', type: 'API_DOC', status: 'in-progress', url: 'https://docs.algoiq.internal/kb/api-registry/lakshmi-engine-api' },
+      { title: 'Kavach-KuberAlpha API v3.5.0 - Pending', type: 'API_DOC', status: 'planned', url: 'https://docs.algoiq.internal/kb/api-registry/kavach-kuberalpha-api' },
+      { title: 'Manthan API v2.8.1 - Pending', type: 'API_DOC', status: 'planned', url: 'https://docs.algoiq.internal/kb/api-registry/manthan-api' },
+      { title: 'API Authentication & Security Standards', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/auth-standards' },
+      { title: 'API Versioning & Deprecation Policy', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/versioning-policy' },
+      { title: 'API Change Approval Workflow', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/change-approval' },
+      { title: 'API Production Readiness Checklist', type: 'KB', status: 'complete', url: 'https://docs.algoiq.internal/kb/api-registry/production-readiness' },
+    ]
+  },
 ];
