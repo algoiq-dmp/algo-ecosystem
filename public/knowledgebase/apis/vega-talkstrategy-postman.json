@@ -1,0 +1,653 @@
+{
+  "info": {
+    "name": "TalkStrategy API",
+    "description": "TalkStrategy API - Multi-account trading platform with JWT auth, MQ messaging, ratio trading, and XTS order translation.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"{{admin_password}}\"\n}" },
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login as User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"{{user_name}}\",\n  \"password\": \"{{user_password}}\"\n}" },
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"newuser\",\n  \"password\": \"password123\",\n  \"email\": \"user@example.com\"\n}" },
+            "url": { "raw": "{{base_url}}/api/auth/register", "host": ["{{base_url}}"], "path": ["api", "auth", "register"] }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/auth/refresh", "host": ["{{base_url}}"], "path": ["api", "auth", "refresh"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/auth/logout", "host": ["{{base_url}}"], "path": ["api", "auth", "logout"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Messaging",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/messaging/health", "host": ["{{base_url}}"], "path": ["api", "messaging", "health"] }
+          }
+        },
+        {
+          "name": "Send Raw (Dev/Admin only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"endpoint\": \"CM\",\n  \"rawPayload\": \"10|12345|CM|NSE\"\n}" },
+            "url": { "raw": "{{base_url}}/api/messaging/raw", "host": ["{{base_url}}"], "path": ["api", "messaging", "raw"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Place Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"StrategySetName\": \"MyStrategy\",\n  \"LegId\": 1,\n  \"StrategySetId\": 100,\n  \"ClientOrderId\": 5001,\n  \"Exchange\": \"NSE\",\n  \"Instrument\": \"EQ\",\n  \"Scrip\": \"RELIANCE\",\n  \"Expiry\": \"\",\n  \"Strike\": \"\",\n  \"Cp\": \"\",\n  \"Token\": 12345,\n  \"OrderPricePlan\": 0,\n  \"OrderQty\": 100,\n  \"BuySell\": 1,\n  \"OrderValidity\": 0,\n  \"DqQty\": 0,\n  \"TriggerPrice\": 0.0,\n  \"OrderType\": 0,\n  \"OrderPrice\": 2500.00,\n  \"ContractTickPrice\": 0.05,\n  \"NotifyAllStatusUpdates\": false,\n  \"IsSquareOffOrder\": false,\n  \"CanModify\": true,\n  \"NumberOfModificationsAllowed\": 3,\n  \"UsePercentageForIncrement\": false,\n  \"IncrementTickPrice\": 0.0,\n  \"IncrementTickPercent\": 0.0,\n  \"IntervalForIncrement\": 0,\n  \"CancelOrderIfNotProcessed\": false,\n  \"SqOffOrderIfNotProcessedAtMkt\": false,\n  \"FinalIncrementPercentage\": 0.0\n}" },
+            "url": { "raw": "{{base_url}}/api/orders/place", "host": ["{{base_url}}"], "path": ["api", "orders", "place"] }
+          }
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"StrategySetId\": 100,\n  \"LegId\": 1,\n  \"ClientOrderId\": 5001,\n  \"StrategyName\": \"MyStrategy\"\n}" },
+            "url": { "raw": "{{base_url}}/api/orders/cancel", "host": ["{{base_url}}"], "path": ["api", "orders", "cancel"] }
+          }
+        },
+        {
+          "name": "Modify Order (Stubbed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"InternalOrderId\": 123456789,\n  \"Token\": 12345,\n  \"OrdQty\": 50,\n  \"LtPrice\": 2510.00,\n  \"TriggerPrice\": 0.0\n}" },
+            "url": { "raw": "{{base_url}}/api/orders/modify", "host": ["{{base_url}}"], "path": ["api", "orders", "modify"] }
+          }
+        },
+        {
+          "name": "Cancel All",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"Token\": 0,\n  \"Segment\": \"CM\",\n  \"Exchange\": \"NSE\"\n}" },
+            "url": { "raw": "{{base_url}}/api/orders/cancel-all", "host": ["{{base_url}}"], "path": ["api", "orders", "cancel-all"] }
+          }
+        },
+        {
+          "name": "Square Off All",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/orders/squareoff-all?isDay=true", "host": ["{{base_url}}"], "path": ["api", "orders", "squareoff-all"], "query": [{ "key": "isDay", "value": "true" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subscriptions",
+      "item": [
+        {
+          "name": "Subscribe",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"feedType\": \"CM\",\n  \"tokens\": [123, 456]\n}" },
+            "url": { "raw": "{{base_url}}/api/subscribe", "host": ["{{base_url}}"], "path": ["api", "subscribe"] }
+          }
+        },
+        {
+          "name": "Unsubscribe",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"feedType\": \"CM\"\n}" },
+            "url": { "raw": "{{base_url}}/api/subscribe", "host": ["{{base_url}}"], "path": ["api", "subscribe"] }
+          }
+        },
+        {
+          "name": "Get Subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/subscribe", "host": ["{{base_url}}"], "path": ["api", "subscribe"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Book & Positions",
+      "item": [
+        {
+          "name": "Get Order Book",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/book/orders", "host": ["{{base_url}}"], "path": ["api", "book", "orders"] }
+          }
+        },
+        {
+          "name": "Get Trade Book",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/book/trades", "host": ["{{base_url}}"], "path": ["api", "book", "trades"] }
+          }
+        },
+        {
+          "name": "Get Strategy Net Position",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"StrategySetId\": -1,\n  \"LegId\": 0,\n  \"ClientOrderId\": 0,\n  \"StrategyName\": \"\"\n}" },
+            "url": { "raw": "{{base_url}}/api/positions/strategy", "host": ["{{base_url}}"], "path": ["api", "positions", "strategy"] }
+          }
+        },
+        {
+          "name": "Get Vendor Net Position",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/positions/vendor", "host": ["{{base_url}}"], "path": ["api", "positions", "vendor"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Strategy Actions",
+      "item": [
+        {
+          "name": "Exit Strategy",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/strategy/1/exit", "host": ["{{base_url}}"], "path": ["api", "strategy", "1", "exit"] }
+          }
+        },
+        {
+          "name": "Cancel Strategy",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/strategy/1/cancel", "host": ["{{base_url}}"], "path": ["api", "strategy", "1", "cancel"] }
+          }
+        },
+        {
+          "name": "Exit Multi Strategy",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "[\n  { \"StrategySetId\": 100, \"LegId\": 1, \"ClientOrderId\": 0, \"StrategyName\": \"\" },\n  { \"StrategySetId\": 200, \"LegId\": 1, \"ClientOrderId\": 0, \"StrategyName\": \"\" }\n]" },
+            "url": { "raw": "{{base_url}}/api/strategy/exit-multi", "host": ["{{base_url}}"], "path": ["api", "strategy", "exit-multi"] }
+          }
+        },
+        {
+          "name": "Get All Strategy Net Positions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/strategy/net-position", "host": ["{{base_url}}"], "path": ["api", "strategy", "net-position"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "XTS Orders",
+      "item": [
+        {
+          "name": "Place Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"symbol\": \"RELIANCE\",\n  \"quantity\": 100,\n  \"price\": 2500.00,\n  \"buySell\": \"Buy\",\n  \"orderType\": \"Limit\",\n  \"exchange\": \"NSE\",\n  \"productType\": \"NRML\"\n}" },
+            "url": { "raw": "{{base_url}}/api/xts/orders", "host": ["{{base_url}}"], "path": ["api", "xts", "orders"] }
+          }
+        },
+        {
+          "name": "Modify Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"orderId\": \"12345\",\n  \"quantity\": 50,\n  \"price\": 2510.00\n}" },
+            "url": { "raw": "{{base_url}}/api/xts/orders/modify", "host": ["{{base_url}}"], "path": ["api", "xts", "orders", "modify"] }
+          }
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"orderId\": \"12345\"\n}" },
+            "url": { "raw": "{{base_url}}/api/xts/orders/cancel", "host": ["{{base_url}}"], "path": ["api", "xts", "orders", "cancel"] }
+          }
+        },
+        {
+          "name": "Get Vendors",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/xts/vendors", "host": ["{{base_url}}"], "path": ["api", "xts", "vendors"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Enums",
+      "item": [
+        {
+          "name": "Get All Enums",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/enums", "host": ["{{base_url}}"], "path": ["api", "enums"] }
+          }
+        },
+        {
+          "name": "Get Enum by Name",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/enums/BuySell", "host": ["{{base_url}}"], "path": ["api", "enums", "BuySell"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/users", "host": ["{{base_url}}"], "path": ["api", "admin", "users"] }
+          }
+        },
+        {
+          "name": "Approve User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/users/2/approve", "host": ["{{base_url}}"], "path": ["api", "admin", "users", "2", "approve"] }
+          }
+        },
+        {
+          "name": "Reject User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/users/2/reject", "host": ["{{base_url}}"], "path": ["api", "admin", "users", "2", "reject"] }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/users/2", "host": ["{{base_url}}"], "path": ["api", "admin", "users", "2"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Accounts",
+      "item": [
+        {
+          "name": "List Accounts",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/accounts", "host": ["{{base_url}}"], "path": ["api", "admin", "accounts"] }
+          }
+        },
+        {
+          "name": "Create Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test Account\",\n  \"userId\": 2,\n  \"mqConfigId\": 1,\n  \"strategyConfigId\": 1,\n  \"translationConfigId\": 1,\n  \"isActive\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/admin/accounts", "host": ["{{base_url}}"], "path": ["api", "admin", "accounts"] }
+          }
+        },
+        {
+          "name": "Update Account",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Account\",\n  \"mqConfigId\": 1,\n  \"strategyConfigId\": 1,\n  \"translationConfigId\": 1,\n  \"isActive\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/admin/accounts/1", "host": ["{{base_url}}"], "path": ["api", "admin", "accounts", "1"] }
+          }
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/accounts/1", "host": ["{{base_url}}"], "path": ["api", "admin", "accounts", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - MQ Configs",
+      "item": [
+        {
+          "name": "List MQ Configs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/mq-configs", "host": ["{{base_url}}"], "path": ["api", "admin", "mq-configs"] }
+          }
+        },
+        {
+          "name": "Create MQ Config",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"New MQ\",\n  \"ip\": \"localhost\",\n  \"reqPort\": 5580,\n  \"subPort\": 5570,\n  \"queueSize\": 1000\n}" },
+            "url": { "raw": "{{base_url}}/api/admin/mq-configs", "host": ["{{base_url}}"], "path": ["api", "admin", "mq-configs"] }
+          }
+        },
+        {
+          "name": "Update MQ Config",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated MQ\",\n  \"ip\": \"192.168.1.100\"\n}" },
+            "url": { "raw": "{{base_url}}/api/admin/mq-configs/1", "host": ["{{base_url}}"], "path": ["api", "admin", "mq-configs", "1"] }
+          }
+        },
+        {
+          "name": "Delete MQ Config",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/mq-configs/1", "host": ["{{base_url}}"], "path": ["api", "admin", "mq-configs", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Strategy Configs",
+      "item": [
+        {
+          "name": "List Strategy Configs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/strategy-configs", "host": ["{{base_url}}"], "path": ["api", "admin", "strategy-configs"] }
+          }
+        },
+        {
+          "name": "Create Strategy Config",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"New Strategy\",\n  \"isRatioEnabled\": true,\n  \"lotMultiplier\": 2.0,\n  \"maxOrderQty\": 5000,\n  \"lotRoundingMode\": \"RoundUp\",\n  \"splitOrdersEnabled\": false,\n  \"rejectIfExceedsCap\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/admin/strategy-configs", "host": ["{{base_url}}"], "path": ["api", "admin", "strategy-configs"] }
+          }
+        },
+        {
+          "name": "Update Strategy Config",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Strategy\",\n  \"lotMultiplier\": 3.0\n}" },
+            "url": { "raw": "{{base_url}}/api/admin/strategy-configs/1", "host": ["{{base_url}}"], "path": ["api", "admin", "strategy-configs", "1"] }
+          }
+        },
+        {
+          "name": "Delete Strategy Config",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/strategy-configs/1", "host": ["{{base_url}}"], "path": ["api", "admin", "strategy-configs", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Translation Configs",
+      "item": [
+        {
+          "name": "List Translation Configs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/translation-configs", "host": ["{{base_url}}"], "path": ["api", "admin", "translation-configs"] }
+          }
+        },
+        {
+          "name": "Create Translation Config",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"XTS Translation\",\n  \"vendorType\": \"XTS\",\n  \"defaultExchange\": \"NSE\",\n  \"defaultProductType\": \"NRML\",\n  \"defaultOrderType\": \"Limit\"\n}" },
+            "url": { "raw": "{{base_url}}/api/admin/translation-configs", "host": ["{{base_url}}"], "path": ["api", "admin", "translation-configs"] }
+          }
+        },
+        {
+          "name": "Update Translation Config",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Translation\",\n  \"defaultExchange\": \"BSE\"\n}" },
+            "url": { "raw": "{{base_url}}/api/admin/translation-configs/1", "host": ["{{base_url}}"], "path": ["api", "admin", "translation-configs", "1"] }
+          }
+        },
+        {
+          "name": "Delete Translation Config",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/admin/translation-configs/1", "host": ["{{base_url}}"], "path": ["api", "admin", "translation-configs", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contracts",
+      "item": [
+        {
+          "name": "Get Contract",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/contract?token=12345&segment=CM&exchange=NSE",
+              "host": ["{{base_url}}"],
+              "path": ["api", "contract"],
+              "query": [
+                { "key": "token", "value": "12345" },
+                { "key": "segment", "value": "CM" },
+                { "key": "exchange", "value": "NSE" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Fetch Contract from MQ",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": 12345,\n  \"segment\": \"CM\",\n  \"exchange\": \"NSE\"\n}" },
+            "url": {
+              "raw": "{{base_url}}/api/contract/fetch",
+              "host": ["{{base_url}}"],
+              "path": ["api", "contract", "fetch"]
+            }
+          }
+        },
+        {
+          "name": "Get Cache Count",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/contract/cache/count",
+              "host": ["{{base_url}}"],
+              "path": ["api", "contract", "cache", "count"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Docs",
+      "item": [
+        {
+          "name": "Download Postman Collection",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/docs/postman", "host": ["{{base_url}}"], "path": ["api", "docs", "postman"] }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:50000" },
+    { "key": "token", "value": "" },
+    { "key": "admin_token", "value": "" },
+    { "key": "admin_password", "value": "" },
+    { "key": "user_name", "value": "" },
+    { "key": "user_password", "value": "" }
+  ]
+}

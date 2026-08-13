@@ -1,52 +1,80 @@
-# Algo IQ Ecosystem — API Registry
+# Algo IQ API Documentation Index
 
-## Governance Matrix
+> Latest API documents — updated 12 Aug 2026
 
-| Sr | API / Engine | Status | Priority | Comm Type | Auth | Version |
-|---|---|---|---|---|---|---|
-| 1 | Surya Engine API | Required | Go-Live Critical | Pull + Push | API Key | 3.5.0 |
-| 2 | Ganesh Engine API | Required | Go-Live Critical | Pull | API Key | 2.6.1 |
-| 3 | TalkOptions API | Required | High Priority | Pull | API Key | 4.7.2 |
-| 4 | Suchak ↔ Kuber Alpha API | Required | High Priority | Two-way | API Key + JWT | 5.0.0 |
-| 5 | Garuda Margin API | Required | High Priority | Request/Response | API Key | 5.0.0 |
-| 6 | Garuda Margin Intelligence API | Required | Pending | Request/Response | API Key | 5.0.0 |
-| 7 | TalkDelta API | Required | High Priority | Two-way | API Key | 6.0.0-beta |
-| 8 | Vega TalkStrategy API | Required | Go-Live Critical | Push | API Key + JWT | 6.3.0 |
-| 9 | Vega Order Processor API | Required | Go-Live Critical | Two-way | API Key | 6.3.0 |
-| 10 | MQ API | Required | Go-Live Critical | Pub/Sub | Internal | 1.8.4 |
-| 11 | WebSocket API | Required | Go-Live Critical | Publish | JWT | 2.3.2 |
-| 12 | Lakshmi Engine API | In Progress | Go-Live Critical | Publish + Pull | API Key | 3.0.0 |
-| 13 | Kavach ↔ Kuber Alpha API | Pending | Pending | Two-way | API Key + JWT | 3.5.0 |
-| 14 | Manthan API | Pending | Pending | Two-way | API Key | 2.8.1 |
+## Document List
 
-## Standard API Document Structure
+| # | API | File | Base URL | Auth |
+|---|---|---|---|---|
+| 1 | Ganesh Broadcast API | `ganesh-api.md` | `http://192.168.190.120:9081` | Bearer Token (JWT) + x-bypass |
+| 2 | Suchak Engine API v2.0 | `suchak-api.md` | `http://localhost:8060` | JWT Bearer (public endpoints exist) |
+| 3 | Surya External Engine API | `surya-api.md` | `http://192.168.190.120:9191` | X-API-KEY + X-CLIENT-CODE (dual auth) |
+| 4 | TalkDelta Prime API | `talkdelta-api.md` | `http://localhost:5000` | None |
+| 5 | TalkOptions API | `talkoptions-api.md` | `https://webapi.talkoptions.in` | x-bypass header |
+| 6 | WebSocket Integration Guide | `websocket-api.md` | `wss://wssreact.talkoptions.in` | Query param token |
+| 7 | Vega TalkStrategy API Reference | `vega-talkstrategy-api.md` | `http://localhost:50000` | JWT Bearer (HS256) |
+| 8 | Vega TalkStrategy Dashboard Guide | `vega-talkstrategy-dashboard.md` | `http://localhost:50000` | JWT Bearer |
+| 9 | Vega TalkStrategy Postman Collection | `vega-talkstrategy-postman.json` | — | — |
 
-Every API document must contain:
-1. Overview
-2. Purpose
-3. Authentication
-4. Base URL
-5. Headers
-6. Request format
-7. Response format
-8. Error codes
-9. Retry policy
-10. Rate limits
-11. Timeout values
-12. Webhook events
-13. Sample requests
-14. Sample responses
-15. Sequence diagrams
-16. Dependency matrix
-17. Versioning policy
-18. Changelog
-19. Testing checklist
-20. Security considerations
-21. Production readiness checklist
+## Key Endpoints Summary
 
-## Governance
+### Ganesh (OHLC Data)
+- `POST /api/Auth/Login`
+- `POST /api/Broadcast/GetOHLC`
+- `POST /api/Broadcast/GetRequiredTokenOHLC`
+- `POST /api/Broadcast/combined-ohlc`
+- `POST /api/Broadcast/Expression-ohlc`
+- `POST /api/Broadcast/ByContract-ohlc`
+- `POST /api/BroadcastBse/GetOHLC`
+- `POST /api/BroadcastBse/ByContract-ohlc`
 
-- API owners are responsible for maintaining documentation
-- All API changes require approval through the Change Approval Workflow
-- Swagger/OpenAPI specs should be published alongside documentation
-- Test and Production URLs must be documented
+### Suchak (Technical Indicators)
+- `POST /auth/login`
+- `POST /api/v1/indicator/value` (105 indicators)
+- `GET /dashboard/fast`
+- `GET /status`
+- `GET /api/ltp-stream` (SSE)
+- `GET /screeners` + CRUD
+- `POST /instruments`
+- `GET /candles/:symbol`
+- `GET /mst/symbols`, `GET /mst/lookup`
+- `GET /api/debug/plugins`, `GET /api/debug/calculation`
+- `GET /broadcast/status`, `POST /broadcast/fetch`
+
+### Surya (Exchange Reference Data — SSOT)
+- `POST /api/v1/auth/clients/approve` (One-Time Approval)
+- `GET /api/v1/instruments/search`
+- `GET /api/v1/instruments/token/{token}`
+- `GET /api/v1/instruments/contracts`
+- `GET /api/v1/instruments/bhavcopy`
+- `GET /api/v1/instruments/holidays`
+- `GET /api/v1/exchangefilemanager/monitoring`
+- `GET /api/v1/ingestion/download`
+- `GET /api/v1/dashboard/stats`
+- 57 total endpoints
+
+### TalkDelta Prime (Portfolio Analytics)
+- `GET /portfolio`, `POST /portfolio`
+- `POST /portfolio/push`
+- `GET /var`, `GET /var/{name}`, `POST /var`, `POST /var/push`
+- `POST /tradetrail`
+
+### TalkOptions (Options Analytics — 279 endpoints)
+- `POST /api/Auth/Login`
+- Market: Adv/Dec, Sectorial, Heatmap, Contributors
+- Analysis: IV Screener, Skew, Greeks, OI, PCR
+- Strategies: Straddle, Strangle, Butterfly, Ratio
+- NSE Contracts, Portfolio, Watchlist, AI Analysis
+
+### Vega TalkStrategy (Order Execution)
+- `POST /api/auth/login`, `register`, `refresh`, `logout`
+- Admin: users, accounts, mq-configs, strategy-configs, translation-configs
+- `GET /api/book/orders`, `GET /api/book/trades`
+- `POST /api/positions/strategy`, `GET /api/positions/vendor`
+- `POST /api/orders/place`, `cancel`, `modify`, `cancel-all`, `squareoff-all`
+- `POST /api/strategy/{id}/exit`, `cancel`, `exit-multi`, `net-position`
+- `POST /api/subscribe`, `DELETE /api/subscribe`
+- `POST /api/xts/orders`, `modify`, `cancel`
+- `GET /api/contract`, `POST /api/contract/fetch`
+- `POST /api/messaging/raw`
+- `GET /api/enums`
