@@ -1665,8 +1665,6 @@ export const connections: Connection[] = [
   { id: 'c4', source: 'ganesh', target: 'suchak', type: 'ohlc', protocol: 'REST + WS', bidirectional: false },
   { id: 'c5', source: 'ganesh', target: 'simulator', type: 'ohlc', protocol: 'MQ', bidirectional: false },
   { id: 'c6', source: 'ganesh', target: 'talkoptions', type: 'ohlc', protocol: 'MQ', bidirectional: false },
-  { id: 'c35', source: 'vega', target: 'talkdelta', type: 'trade-confirmation', protocol: 'MQ', bidirectional: false },
-  { id: 'c36', source: 'vega', target: 'talkoffice', type: 'trade-confirmation', protocol: 'MQ', bidirectional: false },
   { id: 'c9', source: 'ganesh', target: 'vyuh', type: 'ohlc', protocol: 'MQ', bidirectional: false },
   { id: 'c10', source: 'ganesh', target: 'spreadwatch', type: 'ohlc', protocol: 'MQ', bidirectional: false },
   { id: 'c11', source: 'ganesh', target: 'manthan', type: 'ohlc', protocol: 'MQ', bidirectional: false },
