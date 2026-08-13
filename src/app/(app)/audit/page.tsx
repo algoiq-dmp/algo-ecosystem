@@ -149,8 +149,8 @@ export default function AuditPage() {
   const toggleFilter = (arr: string[], val: string) =>
     arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
 
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
+  const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const thirtyDaysAgo = useMemo(() => new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10), []);
 
   const animTotal = useCountUp(auditLogs.length, 1000);
   const animCritical = useCountUp(criticalToday, 800);

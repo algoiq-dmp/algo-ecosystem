@@ -2,11 +2,9 @@
 
 import { useState, useMemo } from 'react';
 import { apiMatrix, apiFlows, apiPriorities, apiStatuses, apiGovernanceFields, apiPricingPlans } from '@/data/api-matrix';
-import type { ApiMatrixEntry } from '@/data/api-matrix';
 import {
-  FiSearch, FiFilter, FiExternalLink, FiChevronDown, FiChevronRight,
-  FiCheckCircle, FiClock, FiAlertCircle, FiArrowRight, FiArrowDown,
-  FiActivity, FiShield, FiRadio, FiWifi, FiDatabase, FiLayers,
+  FiSearch, FiFilter, FiChevronDown, FiChevronRight,
+  FiCheckCircle, FiClock, FiAlertCircle, FiArrowRight,
 } from 'react-icons/fi';
 
 const priorityColors: Record<string, string> = {

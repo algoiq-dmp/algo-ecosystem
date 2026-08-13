@@ -20,6 +20,17 @@ export default function Home() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
   const { isBeta, toggleMode } = useBetaModeStore();
+  const { theme } = useTheme();
+
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [rightOpen, setRightOpen] = useState(true);
+  const [activeTypes, setActiveTypes] = useState<Set<string>>(new Set(['product', 'engine', 'api', 'infrastructure', 'strategy', 'exchange', 'broker']));
+
+  const hiddenNodeIds = useMemo(() => {
+    if (!isBeta) return new Set<string>();
+    return new Set(BETA_HIDDEN_NODES);
+  }, [isBeta]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -28,17 +39,6 @@ export default function Home() {
   }, [isAuthenticated, router]);
 
   if (!isAuthenticated) return null;
-
-  const [selectedNode, setSelectedNode] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [rightOpen, setRightOpen] = useState(true);
-  const [activeTypes, setActiveTypes] = useState<Set<string>>(new Set(['product', 'engine', 'api', 'infrastructure', 'strategy', 'exchange', 'broker']));
-  const { theme } = useTheme();
-
-  const hiddenNodeIds = useMemo(() => {
-    if (!isBeta) return new Set<string>();
-    return new Set(BETA_HIDDEN_NODES);
-  }, [isBeta]);
 
   const handleSelectNode = (id: string | null) => {
     setSelectedNode(id);

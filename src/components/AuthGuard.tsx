@@ -10,15 +10,15 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  if (!pathname) return null;
-
-  const isPublic = PUBLIC_ROUTES.includes(pathname);
+  const isPublic = PUBLIC_ROUTES.includes(pathname ?? '');
 
   useEffect(() => {
     if (!isAuthenticated && !isPublic) {
       router.replace('/home');
     }
   }, [isAuthenticated, pathname, router, isPublic]);
+
+  if (!pathname) return null;
 
   if (!isAuthenticated && !isPublic) {
     return null;

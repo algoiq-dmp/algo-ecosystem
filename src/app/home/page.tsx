@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence, easeOut, easeInOut } from 'framer-motion';
+import Link from 'next/link';
 import {
   Bot, Zap, Server, Shield, BookOpen, Cpu, Network,
   Globe, Code, Rocket, ChevronDown, ChevronRight, Star,
@@ -195,15 +196,15 @@ function Hero() {
             for modern algorithmic trading desks.
           </motion.p>
           <motion.div variants={fadeInUp} custom={4} className="mt-10 flex flex-wrap justify-center gap-4">
-            <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20">
+            <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20">
               Explore Topology <ChevronRight className="w-4 h-4" />
-            </a>
-            <a href="/docs" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-700 font-medium rounded-xl border border-gray-200 hover:border-blue-200 hover:text-blue-600 transition-colors shadow-sm">
+            </Link>
+            <Link href="/docs" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-700 font-medium rounded-xl border border-gray-200 hover:border-blue-200 hover:text-blue-600 transition-colors shadow-sm">
               Documentation <BookOpen className="w-4 h-4" />
-            </a>
-            <a href="/architecture" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-700 font-medium rounded-xl border border-gray-200 hover:border-blue-200 hover:text-blue-600 transition-colors shadow-sm">
+            </Link>
+            <Link href="/architecture" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-700 font-medium rounded-xl border border-gray-200 hover:border-blue-200 hover:text-blue-600 transition-colors shadow-sm">
               Architecture <Server className="w-4 h-4" />
-            </a>
+            </Link>
           </motion.div>
         </motion.div>
       </div>
